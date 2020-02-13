@@ -13,8 +13,8 @@ echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 echo 'Обновим текущую локаль системы'
 locale-gen
 
-echo 'Указываем язык системы'
-echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
+# echo 'Указываем язык системы'
+# echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 
 echo 'Вписываем KEYMAP=ru FONT=cyr-sun16'
 echo 'KEYMAP=ru' >> /etc/vconsole.conf
@@ -25,7 +25,7 @@ mkinitcpio -p linux
 
 echo '3.5 Устанавливаем загрузчик'
 pacman -Syy
-pacman -S grub --noconfirm 
+pacman -S grub efibootmgr --noconfirm 
 grub-install /dev/sda
 
 echo 'Обновляем grub.cfg'
@@ -63,18 +63,20 @@ echo 'Ставим иксы и драйвера'
 pacman -S $gui_install
 
 echo "Какое DE ставим?"
-read -p "1 - XFCE, 2 - KDE, 3 - Openbox: " vm_setting
+read -p "1 - XFCE, 2 - KDE, 3 - Openbox, 4 - i3vm: " vm_setting
 if [[ $vm_setting == 1 ]]; then
   pacman -S xfce4 xfce4-goodies --noconfirm
 elif [[ $vm_setting == 2 ]]; then
   pacman -Sy plasma-meta kdebase --noconfirm
 elif [[ $vm_setting == 3 ]]; then  
   pacman -S  openbox xfce4-terminal
+elif [[ $vm_setting == 4 ]]; then  
+  pacman -S i3vm
 fi
 
-echo 'Cтавим DM'
-pacman -S lxdm --noconfirm
-systemctl enable lxdm
+echo 'Cтавим slim'
+pacman -S slim archlinux-themes-slim --noconfirm
+systemctl enable slim
 
 echo 'Ставим шрифты'
 pacman -S ttf-liberation ttf-dejavu --noconfirm 
